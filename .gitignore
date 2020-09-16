@@ -1,0 +1,5 @@
+# Exclude intellij setting files
+.idea
+
+# Etc
+.gradle
