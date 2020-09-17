@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -21,13 +22,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private TokenProvider tokenProvider;
     private CorsFilter corsFilter;
+    private SecurityProblemSupport problemSupport;
 
     public SecurityConfiguration() {
     }
 
-    public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter) {
+    public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
+        this.problemSupport = problemSupport;
     }
 
     @Bean
@@ -43,7 +46,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .csrf()
                 .disable()
             .addFilterBefore(new CorsFilter(new UrlBasedCorsConfigurationSource()), UsernamePasswordAuthenticationFilter.class)
-
+            .exceptionHandling()
+                .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport)
+        .and()
             .headers()
             .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
         .and()
