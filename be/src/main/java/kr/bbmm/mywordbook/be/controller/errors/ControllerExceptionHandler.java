@@ -1,4 +1,4 @@
-package kr.bbmm.mywordbook.be.controller;
+package kr.bbmm.mywordbook.be.controller.errors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
