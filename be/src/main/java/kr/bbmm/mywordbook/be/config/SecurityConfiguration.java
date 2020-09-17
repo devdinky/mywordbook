@@ -10,7 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
@@ -40,6 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // Disable csrf because using JWT
             .csrf()
                 .disable()
+            .addFilterBefore(new CorsFilter(new UrlBasedCorsConfigurationSource()), UsernamePasswordAuthenticationFilter.class)
 
             .headers()
             .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
@@ -62,6 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             // Add requests Here
             .antMatchers("/api/register").permitAll()
+            .antMatchers("/api/authenticate").permitAll()
 
         .and()
             .httpBasic()
