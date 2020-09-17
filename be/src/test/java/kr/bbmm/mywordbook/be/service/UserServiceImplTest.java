@@ -58,7 +58,7 @@ class UserServiceImplTest {
                 .thenReturn(Optional.of(user));
 
         when(userRepository.findOneByLogin(testUserLogin))
-                .thenReturn(Optional.of(user));
+                .thenReturn(Optional.empty());
 
         // Then
         assertThrows(EmailAlreadyUsedException.class, () -> userService.registerUser(userDTO, testUserPassword));
