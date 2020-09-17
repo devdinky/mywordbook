@@ -10,16 +10,20 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
+    private final CorsFilter corsFilter;
 
-    public SecurityConfiguration(TokenProvider tokenProvider) {
+    public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter) {
         this.tokenProvider = tokenProvider;
+        this.corsFilter = corsFilter;
     }
 
     @Bean
@@ -34,6 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // Disable csrf because using JWT
             .csrf()
                 .disable()
+
+        .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
 
             .headers()
             .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
