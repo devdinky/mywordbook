@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
+
 @Component
 public class TokenProvider {
 
@@ -34,10 +35,10 @@ public class TokenProvider {
 
     private long tokenValidityInMillisecondsForRememberMe;
 
-    private final String SECRET = "SAMPLE_SECRET";
+    private final String SECRET = "SAMPLE_SECRET_SAMPLE_SECRET_SAMPLE_SECRET_SAMPLE_SECRET_SAMPLE_SECRET_SAMPLE_SECRET_SAMPLE_SECRET__";
 
-    private final long tokenValidityInSeconds = 1000;
-    private final long tokenValidityInSecondsForRememberMe = 1000;
+    private final long tokenValidityInSeconds = 6000;
+    private final long tokenValidityInSecondsForRememberMe = 6000;
 
     public TokenProvider() {
     }
