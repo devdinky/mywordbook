@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.filter.CorsFilter;
 
@@ -42,8 +41,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .csrf()
                 .disable()
 
-        .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-
             .headers()
             .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:")
         .and()
@@ -64,6 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .authorizeRequests()
             // Add requests Here
+            .antMatchers("/api/register").permitAll()
 
         .and()
             .httpBasic()
