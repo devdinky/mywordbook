@@ -7,8 +7,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.validation.ConstraintViolationException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -64,6 +65,60 @@ class UserRepositoryTest {
 
         // Then
         assertEquals(savedUser.getLogin(), user.getLogin());
+    }
+
+    @Test
+    public void testFindUserByLogin() {
+        // Given
+        String testUserLogin = "devdinky";
+        String testUserHashedPassword = "012345678901234567890123456789012345678901234567890123456789";
+        String testUserEmail = "devdinky@gmail.com";
+        String testUserFirstName = "Sunghoon";
+        String testUserLastName = "Kim";
+        String testUserLangKey = "en";
+
+        User user = new User();
+        user.setLogin(testUserLogin);
+        user.setPassword(testUserHashedPassword);
+        user.setEmail(testUserEmail);
+        user.setFirstName(testUserFirstName);
+        user.setLastName(testUserLastName);
+        user.setLangKey(testUserLangKey);
+
+        User savedUser = userRepository.save(user);
+        // When
+        Optional<User> findUserOpt = userRepository.findOneByLogin(testUserLogin);
+
+        // Then
+        assertTrue(findUserOpt.isPresent());
+        assertEquals(findUserOpt.get(), savedUser);
+    }
+
+    @Test
+    public void testFindUserByEmail() {
+        // Given
+        String testUserLogin = "devdinky";
+        String testUserHashedPassword = "012345678901234567890123456789012345678901234567890123456789";
+        String testUserEmail = "devdinky@gmail.com";
+        String testUserFirstName = "Sunghoon";
+        String testUserLastName = "Kim";
+        String testUserLangKey = "en";
+
+        User user = new User();
+        user.setLogin(testUserLogin);
+        user.setPassword(testUserHashedPassword);
+        user.setEmail(testUserEmail);
+        user.setFirstName(testUserFirstName);
+        user.setLastName(testUserLastName);
+        user.setLangKey(testUserLangKey);
+
+        User savedUser = userRepository.save(user);
+        // When
+        Optional<User> findUserOpt = userRepository.findOneByEmailIgnoreCase(testUserEmail);
+
+        // Then
+        assertTrue(findUserOpt.isPresent());
+        assertEquals(findUserOpt.get(), savedUser);
     }
 
 
